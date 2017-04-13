@@ -9,3 +9,6 @@ jinja.
 	flask_manager createProject <name>
 	flask_manager createApp <name>
 
+
+## How to Install
+	sudo make install
