@@ -1,0 +1,116 @@
+#!/bin/bash
+
+# options
+CREATE_PROJECT="createProject"
+CREATE_APP="createApp"
+
+# opt and parammeters
+opt=$1
+name=$2
+
+function Usage() {
+	echo "Usage:"
+	echo "	flask_manager createProject <project name>"
+	echo "	flask_manager createApp <app name>"
+	exit 1
+}
+
+function CreateP() {
+	mkdir $1
+	cd $1
+	touch run.py
+	mkdir apps
+	echo "#!/usr/bin/python" >> run.py
+	echo "" >> run.py
+	echo "from apps import app" >> run.py
+	echo "" >> run.py
+	echo "app.run(debug=True)" >> run.py
+
+	cd apps
+	touch run_apps.py
+	echo "#!/usr/bin/python" >> run_apps.py
+	echo "" >> run_apps.py
+	echo "from flask import Flask" >> run_apps.py
+	echo "# add from app_folder import app_view" >> run_apps.py
+	echo "" >> run_apps.py
+	echo "# add app.register_blueprint(app_name)" >> run_apps.py
+	echo "" >> run_apps.py
+	echo "app = Flask(__name__)" >> run_apps.py
+}
+
+function CreateA() {
+	if [ -d apps ]; then
+		cd apps
+
+		if [ -d static ]; then
+			cd static
+			mkdir "$1_static"
+			cd ..
+		else
+			mkdir static
+			cd static
+			mkdir "$1_static"
+			cd ..
+		fi
+
+
+		if [ -d templates ]; then
+			cd templates
+			mkdir "$1_templates"
+			cd ..
+		else
+			mkdir templates
+			cd templates
+			mkdir "$1_templates"
+			cd ..
+		fi
+
+		mkdir $1
+		cd $1
+		touch views.py
+		touch __init__.py
+
+		echo "#!/usr/bin/python" >> views.py
+		echo "" >> views.py
+		echo "from flask import Blueprint, render_template" >> views.py
+		echo "from flask import request" >> views.py
+		echo "from flask import Response" >> views.py
+		echo "" >> views.py
+		echo "# add app_name = Blueprint('app_name', __name__, template_folder='templates/')" >> views.py
+	else
+		echo "Error: You must run createApp into project folder"
+	fi
+}
+
+
+if [ "$opt" == "$CREATE_PROJECT" ]; then
+	if [ ! -n  "$name" ]; then
+		echo $name
+		Usage
+	else
+		if [ -d "$name" ]; then
+			# nothing to do here
+			echo >/dev/null
+		else
+			CreateP $name
+		fi
+	fi
+
+elif [ "$opt" == "$CREATE_APP" ]; then
+	if [ ! -n  "$name" ]; then
+		echo $name
+		Usage
+	else
+		if [ -d "$name" ]; then
+			# nothing to do here
+			echo >/dev/null
+		else
+			CreateA $name
+		fi
+	fi
+
+else
+	Usage
+fi
+
+
