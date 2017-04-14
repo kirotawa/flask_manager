@@ -22,7 +22,7 @@ function CreateP() {
 	mkdir apps
 	echo "#!/usr/bin/python" >> run.py
 	echo "" >> run.py
-	echo "from apps import app" >> run.py
+	echo "from apps.run_apps import app" >> run.py
 	echo "" >> run.py
 	echo "app.run(debug=True)" >> run.py
 
@@ -33,9 +33,9 @@ function CreateP() {
 	echo "from flask import Flask" >> run_apps.py
 	echo "# add from app_folder import app_view" >> run_apps.py
 	echo "" >> run_apps.py
-	echo "# add app.register_blueprint(app_name)" >> run_apps.py
 	echo "" >> run_apps.py
 	echo "app = Flask(__name__)" >> run_apps.py
+	echo "# add app.register_blueprint(app_name)" >> run_apps.py
 }
 
 function CreateA() {
