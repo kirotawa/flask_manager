@@ -27,6 +27,7 @@ function CreateP() {
 	echo "app.run(debug=True)" >> run.py
 
 	cd apps
+	touch __init__.py
 	touch run_apps.py
 	echo "#!/usr/bin/python" >> run_apps.py
 	echo "" >> run_apps.py
